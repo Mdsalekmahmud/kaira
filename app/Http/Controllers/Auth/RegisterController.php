@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -49,10 +50,19 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'fast_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'country'  =>['required', 'string',],
+            'c_companyname'  =>['required', 'string',],
+
+
+            'c_address'  =>['required', 'string',],
+            'c_postal_zip'  =>['required', 'string',],
+            'c_state_country'  =>['required', 'string',],
+            'c_phone'  =>['required', 'string',],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ]); 
     }
 
     /**
@@ -64,7 +74,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'role_id'=>3,
+            'fast_name' => $data['fast_name'],
+            'last_name' => $data['last_name'],
+            'country' => $data['country'],
+            'c_companyname' => $data['c_companyname'],
+            'c_address' => $data['c_address'],
+            'c_postal_zip' => $data['c_postal_zip'],
+            'c_state_country' => $data['c_state_country'],
+            'c_phone' => $data['c_phone'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,8 +18,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'country',
+        'role_id',
+        'fast_name',
+        'last_name',
+        'c_companyname',
+        'c_address',
+        'c_state_country',
+        'c_postal_zip',
+        'c_phone',
         'email',
+        'email_verified_at',
         'password',
     ];
 
@@ -42,7 +51,24 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class); 
+    }
+
+    public function hasRole($role)
+    {
+        return $this->role && $this->role->name === $role;  
+    }
+
+    // public function role(){
+    //     return $this->belongsTo(Role::class);
+    // }
+    // public function hasRole($role){
+    //     $this->roles()->where('name',$role)->exists();
+    // }
 }
