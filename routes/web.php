@@ -3,7 +3,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DeliveryCrgController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\CardController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\CategoryController;
@@ -28,7 +28,8 @@ Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 Route::get('/profile', [PageController::class, 'profile'])->name('profile');
 
-
+Route::post('/coupon/apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+Route::post('/coupon/remove', [CartController::class, 'removeCoupon'])->name('coupon.remove');
 
 Route::get('/stripe/{order}', [StripeController::class, 'index'])->name('stripe');
 Route::post('/stripe', [StripeController::class, 'store'])->name('stripe.payment');
@@ -36,13 +37,13 @@ Route::post('/stripe', [StripeController::class, 'store'])->name('stripe.payment
 
 
 
-Route::POST('order-store', [CardController::class, 'checkout'])->name('orderStore');
+Route::POST('order-store', [CartController::class, 'checkout'])->name('orderStore');    
 
 
 
-Route::post('/cart/add', [CardController::class, 'cartadd'])->name('cartadd');
-Route::post('/cart/update/{rowId}', [CardController::class, 'cartupdate'])->name('cartupdate');
-Route::get('/cart/destroy/{rowId}', [CardController::class, 'cartdestroy'])->name('cartdestroy');
+Route::post('/cart/add', [CartController::class, 'cartadd'])->name('cartadd');
+Route::post('/cart/update/{rowId}', [CartController::class, 'cartupdate'])->name('cartupdate');
+Route::get('/cart/destroy/{rowId}', [CartController::class, 'cartdestroy'])->name('cartdestroy');
 
 
 

@@ -2,12 +2,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeliveryCrg;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Order;
-use TaxService;
 use Cart;
-use ServiceTax;
+use TaxService;
 
 class PageController extends Controller
 {
@@ -20,7 +19,7 @@ class PageController extends Controller
     public function shop()
     {
         $products = Product::all();
-        return view('pages.shop',compact('products'));
+        return view('pages.shop', compact('products'));
     }
 
     public function about()
@@ -41,33 +40,36 @@ class PageController extends Controller
     {
         return view('pages.contact');
     }
-    
+
     public function cart()
     {
         $total = TaxService::totalAmount(100);
-        return view('pages.cart',compact('total'));
+
+        return view('pages.cart', compact('total'));
     }
     public function checkout()
     {
-        $deliveryCrgs=DeliveryCrg::all();
-        $total = TaxService::totalAmount(100);
-        return view('pages.checkout',compact('total','deliveryCrgs'));
-    
+        $deliveryCrgs = DeliveryCrg::all();
+        $total        = TaxService::totalAmount(100);
+        if (Cart::count() > 0) {
+            return view('pages.checkout', compact('total', 'deliveryCrgs'));
+        } else {
+            $products = Product::all();
+        return view('pages.home', compact('products'));
+        }
+       
+
     }
 
-   
-    
     public function dashboard()
     {
         return view('dashboard_page.index');
     }
 
-    
-
     public function profile()
     {
-        $orders=order::with('products')->where('user_id', auth()->user()->id)->get();
-        return view('pages.profile',compact('orders'));
+        $orders = order::with('products')->where('user_id', auth()->user()->id)->get();
+        return view('pages.profile', compact('orders'));
     }
 
 }

@@ -7,29 +7,33 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderShipped extends Mailable
+class UserPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $order;
     public $user;
-   
+    public $password;
 
-    public function __construct($order)
+    public function __construct($user, $password)
     {
-        $this->order    = $order;
-        $this->user     = $order->user;
+        $this->user = $user;
+        $this->password = $password;
     }
 
+    // public function build()
+    // {
+    //     return $this->subject('Your Account Password')
+    //         ->view('emails.user_password');
+    // }
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Order Shipped',
-        );
-    }
+   public function envelope(): Envelope
+{
+    return new Envelope(
+        subject: 'Your Account Password',
+    );
+}
 
     /**
      * Get the message content definition.
@@ -37,7 +41,7 @@ class OrderShipped extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.order',
+            view: 'emails.user_password',
         );
     }
 

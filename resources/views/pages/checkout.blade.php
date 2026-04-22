@@ -1,5 +1,4 @@
 <x-app>
-
     <div class="untree_co-section">
         <div class="container">
             <div class="row mb-5">
@@ -8,13 +7,46 @@
                         Returning customer? <a href="#">Click here</a> to login
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+                        <div class="p-3 p-lg-5 border bg-white">
+                            <form id="couponForm" method="POST" action="{{ route('coupon.apply') }}"
+                                enctype="multipart/form-data">
+                                @csrf
+
+                                <label class="text-black mb-3">
+                                    Enter your coupon code if you have one
+                                </label>
+
+                                <div class="input-group w-75 couponcode-wrap">
+                                    <input type="text" name="coupon_code" id="coupon_code" class="form-control me-2"
+                                        placeholder="Coupon Code">
+
+                                    <button id="coupon_btn" class="btn btn-black btn-sm" type="submit">
+                                        Apply
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div id="coupon_msg"></div>
+
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-5 mb-md-0">
-                    <h2 class="h3 mb-3 text-black">Billing Details</h2>
-                    <div class="p-3 p-lg-5 border bg-white">
-                        <form method="POST" action="{{ route('orderStore') }}" enctype="multipart/form-data">
-                            @csrf
+
+            <form method="POST" action="{{ route('orderStore') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+
+                    <div class="col-md-6 mb-5 mb-md-0">
+                        <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                        <div class="p-3 p-lg-5 border bg-white">
+
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Country <span
                                         class="text-danger">*</span></label>
@@ -116,85 +148,80 @@
                             </div>
 
 
-                    </div>
-                </div>
-                <div class="col-md-6">
-
-                    <div class="row mb-5">
-                        <div class="col-md-12">
-                            <h2 class="h3 mb-3 text-black">Coupon Code</h2>
-                            <div class="p-3 p-lg-5 border bg-white">
-
-                                <label for="c_code" class="text-black mb-3">Enter your coupon code if you have
-                                    one</label>
-                                <div class="input-group w-75 couponcode-wrap">
-                                    <input type="text" class="form-control me-2" id="c_code"
-                                        placeholder="Coupon Code" aria-label="Coupon Code"
-                                        aria-describedby="button-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-black btn-sm" type="button"
-                                            id="button-addon2">Apply</button>
-                                    </div>
-                                </div>
-
-                            </div>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-md-12">
-                            <h2 class="h3 mb-3 text-black">Your Order</h2>
-                            <div class="p-3 p-lg-5 border bg-white">
-                                <table class="table site-block-order-table mb-5">
-                                    <thead>
-                                        <th>Product</th>
-                                        <th>Total</th>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (Cart::content() as $item)
+                    <div class="col-md-6">
+                        <div class="row mb-5">
+                            <div class="col-md-12">
+                                <h2 class="h3 mb-3 text-black">Your Order</h2>
+                                <div class="p-3 p-lg-5 border bg-white">
+                                    <table class="table site-block-order-table mb-5">
+                                        <thead>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Cart::content() as $item)
+                                                <tr>
+                                                    <td>{{ $item->name }} <strong
+                                                            class="mx-2">x</strong>{{ $item->qty }}</td>
+                                                    <td>${{ $item->price }}</td>
+                                                </tr>
+                                            @endforeach
                                             <tr>
-                                                <td>{{ $item->name }} <strong
-                                                        class="mx-2">x</strong>{{ $item->qty }}</td>
-                                                <td>${{ $item->price }}</td>
+                                                <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong>
+                                                </td>
+                                                <td id="subtotal" class="text-black">${{ Cart::subtotal() }}</td>
                                             </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                                            <td class="text-black">${{ Cart::subtotal() }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-black font-weight-bold"><strong>Tax</strong></td>
-                                            <td class="text-black font-weight-bold">
-                                                <strong>${{ TaxService::calculate(), 2 }}</strong>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-black font-weight-bold"><strong>Delivery Charge</strong>
-                                            </td>
-                                            <td class="text-black font-weight-bold">
-                                                <strong>$<span id="delivery_charge">0.00</span></strong>
-                                                <input type="hidden" name="delivery_crg" id="delivery_charge_input" value="0">
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td class="text-black font-weight-bold"><strong>Tax</strong></td>
+                                                <td id="tax" class="text-black font-weight-bold">
+                                                    <strong>${{ TaxService::calculate(), 2 }}</strong>
+                                                </td>
+                                            </tr>
 
-                                        <tr>
-                                            <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                                            <td class="text-black font-weight-bold">
-                                                <strong>$<span
-                                                        id="order_total">{{ number_format($total, 2) }}</span></strong>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            <tr>
+                                                <td>Discount</td>
+                                                <td class="text-black font-weight-bold">
+                                                    <strong>$<span id="discount">
+                                                            {{ session('coupon.discount') ?? '0.00' }}
+                                                        </span>
+                                                    </strong>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-black font-weight-bold"><strong>Delivery
+                                                        Charge</strong>
+                                                </td>
+                                                <td class="text-black font-weight-bold">
+                                                    <strong>$<span id="delivery_charge">0.00</span></strong>
+                                                    <input type="hidden" name="delivery_crg"
+                                                        id="delivery_charge_input" value="0">
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-black font-weight-bold"><strong>Order Total</strong>
+                                                </td>
+                                                <td class="text-black font-weight-bold">
+                                                    <strong>$<span
+                                                            id="order_total">{{ number_format($total, 2) }}</span></strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-black btn-lg py-3 btn-block"
-                            onclick="window.location='thankyou.html'">Place Order</button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-black btn-lg py-3 btn-block"
+                                onclick="window.location='thankyou.html'">Place Order</button>
+                        </div>
+
                     </div>
 
                 </div>
-            </div>
             </form>
         </div>
     </div>
@@ -203,13 +230,135 @@
 
 
 <script>
-    document.getElementById('state_country').addEventListener('change', function() {
+    let currentDiscount = parseFloat(
+        document.getElementById('discount')?.innerText.replace(/[^0-9.]/g, '')
+    ) || 0;
+
+
+
+    function calculateTotal() {
+
+        let subTotal = parseFloat(document.getElementById('subtotal')?.innerText.replace(/[^0-9.]/g, '')) || 0;
+        let tax = parseFloat(document.getElementById('tax')?.innerText.replace(/[^0-9.]/g, '')) || 0;
+        let delivery = parseFloat(document.getElementById('delivery_charge')?.innerText.replace(/[^0-9.]/g, '')) || 0;
+
+        let finalTotal = subTotal + tax + delivery - currentDiscount;
+
+        if (finalTotal < 0) finalTotal = 0;
+        document.getElementById('order_total').innerText = finalTotal.toFixed(2);
+    }
+
+
+
+    document.getElementById('state_country')?.addEventListener('change', function() {
+
         let selectedOption = this.options[this.selectedIndex];
         let charge = parseFloat(selectedOption.getAttribute('data-charge')) || 0;
-        let total = parseFloat("{{ $total }}") || 0;
 
         document.getElementById('delivery_charge').innerText = charge.toFixed(2);
-        document.getElementById('order_total').innerText = (total + charge).toFixed(2);
-        document.getElementById('delivery_charge_input').value = charge;
+
+        let input = document.getElementById('delivery_charge_input');
+        if (input) input.value = charge;
+
+        calculateTotal();
     });
+
+
+document.getElementById('couponForm')?.addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    let code = document.getElementById('coupon_code').value.trim();
+    let btn  = document.getElementById('coupon_btn');
+    let msg  = document.getElementById('coupon_msg');
+
+    // 🔥 যদি already applied থাকে → remove coupon
+    if (btn && btn.getAttribute('data-applied') === 'true') {
+
+        fetch("{{ route('coupon.remove') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            currentDiscount = 0;
+            document.getElementById('discount').innerText = "$0.00";
+
+            if (btn) {
+                btn.innerText = "Apply";
+                btn.removeAttribute('data-applied');
+            }
+
+            if (msg) msg.innerHTML = `<span style="color:red">Coupon Removed</span>`;
+
+            calculateTotal();
+        });
+
+        return; 
+    }
+
+    // 🔥 Apply coupon
+    fetch("{{ route('coupon.apply') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            coupon_code: code
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (!data.status) {
+
+            if (msg) msg.innerHTML = `<span style="color:red">${data.message}</span>`;
+
+            currentDiscount = 0;
+            document.getElementById('discount').innerText = "0.00";
+
+            if (btn) {
+                btn.innerText = "Apply";
+                btn.removeAttribute('data-applied');
+            }
+
+            calculateTotal();
+
+        } else {
+
+            currentDiscount = parseFloat(data.discount) || 0;
+
+            document.getElementById('discount').innerText = currentDiscount.toFixed(2);
+
+            if (btn) {
+                btn.innerText = "Remove Coupon";
+                btn.setAttribute('data-applied', 'true');
+            }
+
+            if (msg) msg.innerHTML = `<span style="color:green">${data.message}</span>`;
+
+            calculateTotal();
+        }
+
+    })
+    .catch(err => {
+        console.log("Coupon Error:", err);
+    });
+
+});
+
+    const initialCouponBtn = document.getElementById('coupon_btn');
+    if (currentDiscount > 0 && initialCouponBtn) {
+        initialCouponBtn.innerText = 'Remove Coupon';
+        initialCouponBtn.setAttribute('data-applied', 'true');
+    }
+
+    calculateTotal();
 </script>

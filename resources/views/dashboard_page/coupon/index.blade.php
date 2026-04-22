@@ -43,7 +43,7 @@
                                     <td style="color: black">{{ $coupon->value }}</td>
                                     <td style="color: black">{{ $coupon->min_amount }}</td>
                                     <td style="color: black">{{ $coupon->expired_at }}</td>
-                                    <td style="color: black">{{ $coupon->status }}</td>
+                                    <td style="color: black">{{ $coupon->status == 1 ? 'Active' : 'Inactive' }}</td>
 
                                     <td>
                                         <a href="{{ route('coupon.edit', $coupon->id) }}" class="btn btn-light-success">

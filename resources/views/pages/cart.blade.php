@@ -84,18 +84,7 @@
                             <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="text-black h4" for="coupon">Coupon</label>
-                            <p>Enter your coupon code if you have one.</p>
-                        </div>
-                        <div class="col-md-8 mb-3 mb-md-0">
-                            <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-black">Apply Coupon</button>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="col-md-6 pl-5">
                     <div class="row justify-content-end">
@@ -121,7 +110,7 @@
                                     <strong class="text-black">${{ number_format(TaxService::calculate(),2) }}
                                     </strong>
                                 </div>
-                            </div>
+                            </div>  
                             <div class="row mb-5">
                                 <div class="col-md-6">
                                     <span class="text-black">Total</span>

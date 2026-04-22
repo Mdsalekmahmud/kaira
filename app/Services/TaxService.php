@@ -12,8 +12,6 @@ class TaxService
         
         return (float) str_replace(',', '', Cart::subtotal()) * $this->taxRate;
     }
-
-    
     public function totalAmount()
     {
         $subtotal = (float) str_replace(',', '', Cart::subtotal());

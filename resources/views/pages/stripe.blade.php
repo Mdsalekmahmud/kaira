@@ -25,10 +25,17 @@
 
                             <td class="text-black">${{ $order->tax }}</td>
 
-                        </tr><tr>
+                        </tr>
+                        <tr>
                             <td class="text-black font-weight-bold"><strong>Delivery Charge</strong></td>
 
                             <td class="text-black">${{ $order->delivery_crg }}</td>
+
+                        </tr>
+                        <tr>
+                            <td class="text-black font-weight-bold"><strong>Discount</strong></td>
+
+                            <td class="text-black">${{ $order->discount }}</td>
 
                         </tr>
                         <tr>
