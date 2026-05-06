@@ -18,9 +18,13 @@
                         </thead>
                         <tbody>
                             @foreach (Cart::content() as $item)
+                            {{-- @dd($item->options->products->image) --- IGNORE --- --}}
+
+                            {{-- @dd($item->options->category) --- IGNORE --- --}}
+                            
                                 <tr>
                                     <td class="product-thumbnail">
-                                        <img src="{{ asset('storage/' . $item->image) }}" alt="Image"
+                                        <img style="max-width:50%" src="{{ asset('storage/' . $item->options->products->image) }}" alt="Image"
                                             class="img-fluid">
                                     </td>
                                     <td class="product-name">

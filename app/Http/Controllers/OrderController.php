@@ -11,7 +11,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('dashboard_page.order.index');
+        $orders = Order::with('products')->get();
+        return view('dashboard_page.order.index', compact('orders'));
     }
 
     /**
@@ -19,8 +20,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $order=Order::all();
-        return view('dashboard_page.order.create'); 
+        return view('dashboard_page.order.create');
     }
 
     /**
@@ -36,7 +36,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+
+           
     }
 
     /**
@@ -44,7 +45,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        return view('dashboard_page.order.edit',compact('order'));
     }
 
     /**

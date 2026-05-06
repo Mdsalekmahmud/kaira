@@ -141,12 +141,68 @@
 
 
 
+
                             <div class="form-group">
                                 <label for="c_order_notes" class="text-black">Order Notes</label>
                                 <textarea name="order_notes" id="c_order_notes" cols="30" rows="5" class="form-control"
                                     placeholder="Write your notes here..."></textarea>
                             </div>
 
+                            <div class="container mt-4"
+                                style="max-width: 500px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                                <h2
+                                    style="font-size: 1.25rem; margin-bottom: 1.5rem; color: #333; font-weight: 600; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                                    Select Payment Method
+                                </h2>
+
+                                <div style="margin-bottom: 12px;">
+                                    <label
+                                        style="display: flex; align-items: center; padding: 15px; border: 1px solid #ddd; border-radius: 10px; cursor: pointer; transition: 0.2s; background-color: #fff;"
+                                        onmouseover="this.style.borderColor='#007bff'; this.style.backgroundColor='#f8fbff'"
+                                        onmouseout="this.style.borderColor='#ddd'; this.style.backgroundColor='#fff'">
+                                        <input type="radio" name="payment" value="stripe" 
+                                            style="width: 18px; height: 18px; margin-right: 15px; cursor: pointer;">
+                                        <div style="display: flex; align-items: center; flex-grow: 1;">
+                                            <img src="{{ asset('assets/images/stripe_logo.png') }}" alt="Stripe"
+                                                style="max-height: 40px; width: auto;">
+                                            <span style="margin-left: 15px; font-weight: 500; color: #444;">Credit or
+                                                Debit Card</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <label
+                                        style="display: flex; align-items: center; padding: 15px; border: 1px solid #ddd; border-radius: 10px; cursor: pointer; transition: 0.2s; background-color: #fff;"
+                                        onmouseover="this.style.borderColor='#007bff'; this.style.backgroundColor='#f8fbff'"
+                                        onmouseout="this.style.borderColor='#ddd'; this.style.backgroundColor='#fff'">
+                                        <input type="radio" name="payment" value="paypal"
+                                            style="width: 18px; height: 18px; margin-right: 15px; cursor: pointer;">
+                                        <div style="display: flex; align-items: center; flex-grow: 1;">
+                                            <img src="{{ asset('assets/images/paypal_logo.png') }}" alt="PayPal"
+                                                style="max-height: 22px; width: auto;">
+                                            <span style="margin-left: 15px; font-weight: 500; color: #444;">PayPal
+                                                Express</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <label
+                                        style="display: flex; align-items: center; padding: 15px; border: 1px solid #ddd; border-radius: 10px; cursor: pointer; transition: 0.2s; background-color: #fff;"
+                                        onmouseover="this.style.borderColor='#007bff'; this.style.backgroundColor='#f8fbff'"
+                                        onmouseout="this.style.borderColor='#ddd'; this.style.backgroundColor='#fff'">
+                                        <input type="radio" name="payment" value="cod" checked
+                                            style="width: 18px; height: 18px; margin-right: 15px; cursor: pointer;">
+                                        <div style="display: flex; align-items: center; flex-grow: 1;">
+                                            <img src="{{ asset('assets/images/cash-on-delivery-logo.png') }}"
+                                                alt="COD" style="max-height: 25px; width: auto;">
+                                            <span style="margin-left: 15px; font-weight: 500; color: #444;">Cash on
+                                                Delivery</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -162,6 +218,8 @@
                                         </thead>
                                         <tbody>
                                             @foreach (Cart::content() as $item)
+                                            
+                                            
                                                 <tr>
                                                     <td>{{ $item->name }} <strong
                                                             class="mx-2">x</strong>{{ $item->qty }}</td>
@@ -264,95 +322,95 @@
     });
 
 
-document.getElementById('couponForm')?.addEventListener('submit', function(e) {
+    document.getElementById('couponForm')?.addEventListener('submit', function(e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    let code = document.getElementById('coupon_code').value.trim();
-    let btn  = document.getElementById('coupon_btn');
-    let msg  = document.getElementById('coupon_msg');
+        let code = document.getElementById('coupon_code').value.trim();
+        let btn = document.getElementById('coupon_btn');
+        let msg = document.getElementById('coupon_msg');
 
-    // 🔥 যদি already applied থাকে → remove coupon
-    if (btn && btn.getAttribute('data-applied') === 'true') {
+        // 🔥 যদি already applied থাকে → remove coupon
+        if (btn && btn.getAttribute('data-applied') === 'true') {
 
-        fetch("{{ route('coupon.remove') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
+            fetch("{{ route('coupon.remove') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
 
-            currentDiscount = 0;
-            document.getElementById('discount').innerText = "$0.00";
+                    currentDiscount = 0;
+                    document.getElementById('discount').innerText = "$0.00";
 
-            if (btn) {
-                btn.innerText = "Apply";
-                btn.removeAttribute('data-applied');
-            }
+                    if (btn) {
+                        btn.innerText = "Apply";
+                        btn.removeAttribute('data-applied');
+                    }
 
-            if (msg) msg.innerHTML = `<span style="color:red">Coupon Removed</span>`;
+                    if (msg) msg.innerHTML = `<span style="color:red">Coupon Removed</span>`;
 
-            calculateTotal();
-        });
+                    calculateTotal();
+                });
 
-        return; 
-    }
-
-    // 🔥 Apply coupon
-    fetch("{{ route('coupon.apply') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            coupon_code: code
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-
-        if (!data.status) {
-
-            if (msg) msg.innerHTML = `<span style="color:red">${data.message}</span>`;
-
-            currentDiscount = 0;
-            document.getElementById('discount').innerText = "0.00";
-
-            if (btn) {
-                btn.innerText = "Apply";
-                btn.removeAttribute('data-applied');
-            }
-
-            calculateTotal();
-
-        } else {
-
-            currentDiscount = parseFloat(data.discount) || 0;
-
-            document.getElementById('discount').innerText = currentDiscount.toFixed(2);
-
-            if (btn) {
-                btn.innerText = "Remove Coupon";
-                btn.setAttribute('data-applied', 'true');
-            }
-
-            if (msg) msg.innerHTML = `<span style="color:green">${data.message}</span>`;
-
-            calculateTotal();
+            return;
         }
 
-    })
-    .catch(err => {
-        console.log("Coupon Error:", err);
-    });
+        // 🔥 Apply coupon
+        fetch("{{ route('coupon.apply') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    coupon_code: code
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
 
-});
+                if (!data.status) {
+
+                    if (msg) msg.innerHTML = `<span style="color:red">${data.message}</span>`;
+
+                    currentDiscount = 0;
+                    document.getElementById('discount').innerText = "0.00";
+
+                    if (btn) {
+                        btn.innerText = "Apply";
+                        btn.removeAttribute('data-applied');
+                    }
+
+                    calculateTotal();
+
+                } else {
+
+                    currentDiscount = parseFloat(data.discount) || 0;
+
+                    document.getElementById('discount').innerText = currentDiscount.toFixed(2);
+
+                    if (btn) {
+                        btn.innerText = "Remove Coupon";
+                        btn.setAttribute('data-applied', 'true');
+                    }
+
+                    if (msg) msg.innerHTML = `<span style="color:green">${data.message}</span>`;
+
+                    calculateTotal();
+                }
+
+            })
+            .catch(err => {
+                console.log("Coupon Error:", err);
+            });
+
+    });
 
     const initialCouponBtn = document.getElementById('coupon_btn');
     if (currentDiscount > 0 && initialCouponBtn) {

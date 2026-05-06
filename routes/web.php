@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\DeliveryCrgController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ContactController;
@@ -34,8 +35,9 @@ Route::post('/coupon/remove', [CartController::class, 'removeCoupon'])->name('co
 Route::get('/stripe/{order}', [StripeController::class, 'index'])->name('stripe');
 Route::post('/stripe', [StripeController::class, 'store'])->name('stripe.payment');
 
+Route::get('/paypal/{order}', [PaypalController::class, 'index'])->name('paypal');
 
-
+route::get('/thank-you', [PageController::class, 'thankyou'])->name('thankyou');
 
 Route::POST('order-store', [CartController::class, 'checkout'])->name('orderStore');    
 

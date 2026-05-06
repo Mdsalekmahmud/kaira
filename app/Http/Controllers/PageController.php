@@ -60,16 +60,22 @@ class PageController extends Controller
        
 
     }
+      
+    public function thankyou()
+    {
+        return view('pages.thankyou');
+    }
 
+     public function profile()
+    {
+        $orders = order::with('products')->where('user_id', auth()->user()->id)->get();
+        return view('pages.profile', compact('orders'));
+    }
     public function dashboard()
     {
         return view('dashboard_page.index');
     }
 
-    public function profile()
-    {
-        $orders = order::with('products')->where('user_id', auth()->user()->id)->get();
-        return view('pages.profile', compact('orders'));
-    }
+    
 
 }

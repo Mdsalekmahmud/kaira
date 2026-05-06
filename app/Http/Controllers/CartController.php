@@ -24,16 +24,22 @@ class CartController extends Controller
     {
 
         $product = Product::findOrFail($request->product_add);
+        $ctegory = $product->category;
 
         Cart::add(
             [
                 'id'     => $product->id,
                 'name'   => $product->name,
                 'price'  => $product->s_price ?? $product->price,
-                'qty'    => 1,
+                'qty'    => $request->quantity ?? 1,
                 'weight' => 0,
+                'options' => [
+                    'products' => $product,
+                    'category' => $ctegory,
+                ],
             ]
         );
+       
 
         return back();
     }
@@ -98,14 +104,14 @@ class CartController extends Controller
 
             $userId = $user->id;
 
-            Mail::to($user->email)
-                ->later(now()->addSeconds(5), new UserPasswordMail($user, $password));
+            Mail::to($user->email)->queue(new UserPasswordMail($user, $password));
         }
         $order = Order::create([
             'user_id'        => $userId,
+            'quantity'       => $request->quantity ?? 1,
             'sub_total'      => $subTotal,
             'discount'       => $discount,
-            'coupon_code'    => $couponCode,
+            'coupon_code'    => $couponCode, 
             'total_amount'   => $finalTotal,
             'tax'            => $tax,
             'delivery_crg'   => $delivery_crg,
@@ -121,6 +127,7 @@ class CartController extends Controller
                 'email_address' => $request->email_address,
                 'phone'         => $request->phone,
             ]),
+            'payment_method' => $request->payment,
             'payment_status' => 'unpaid',
             'status'         => 'pending',
         ]);
@@ -132,17 +139,25 @@ class CartController extends Controller
                 'quantity'   => $item->qty,
                 'price'      => $item->price,
                 'total'      => $item->qty * $item->price,
+                'options'    => $item->image,
             ]);
+            
         }
 
         $shippingInfo = json_decode($order->shipping_info, true);
 
-        Mail::to($shippingInfo['email_address'])->send(new OrderShipped($order));
+        Mail::to($shippingInfo['email_address'])->queue(new OrderShipped($order));
 
         session()->forget('coupon');
         session()->regenerate();
         Cart::destroy();
-        return redirect()->route('stripe', $order->id);
+        if ($order->payment_method == 'cod') {
+            return redirect()->route('thankyou', $order->id);
+        } else if ($order->payment_method == 'stripe') {
+            return redirect()->route('stripe', $order->id);
+        }else {
+            return redirect()->route('paypal', $order->id);
+        }
     }
 
     public function applyCoupon(Request $request)
