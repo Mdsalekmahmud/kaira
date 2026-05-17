@@ -34,4 +34,9 @@ public function orders()
                     ->withPivot(['quantity', 'price', 'total'])
                     ->withTimestamps();
     }
+
+ public function variations()
+    {
+        return $this->hasMany(ProductVariation::class);
+    }      
 }

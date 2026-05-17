@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\DeliveryCrg;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\User;
 use Cart;
 use TaxService;
@@ -40,7 +41,12 @@ class PageController extends Controller
     {
         return view('pages.contact');
     }
-
+    public function details(Product $product)
+    {
+        // dd($product);
+        $variation=ProductVariation::where('product_id',$product->id)->get();
+        return view('pages.details', compact('product','variation'));
+    }
     public function cart()
     {
         $total = TaxService::totalAmount(100);
@@ -55,18 +61,17 @@ class PageController extends Controller
             return view('pages.checkout', compact('total', 'deliveryCrgs'));
         } else {
             $products = Product::all();
-        return view('pages.home', compact('products'));
+            return view('pages.home', compact('products'));
         }
-       
 
     }
-      
+
     public function thankyou()
     {
         return view('pages.thankyou');
     }
 
-     public function profile()
+    public function profile()
     {
         $orders = order::with('products')->where('user_id', auth()->user()->id)->get();
         return view('pages.profile', compact('orders'));
@@ -75,7 +80,5 @@ class PageController extends Controller
     {
         return view('dashboard_page.index');
     }
-
-    
 
 }

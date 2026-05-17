@@ -28,6 +28,8 @@ Route::get('/contact.page', [PageController::class, 'contact'])->name('contact.p
 Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 Route::get('/checkout', [PageController::class, 'checkout'])->name('checkout');
 Route::get('/profile', [PageController::class, 'profile'])->name('profile');
+Route::get('/details/{product}', [PageController::class, 'details'])->name('details');
+
 
 Route::post('/coupon/apply', [CartController::class, 'applyCoupon'])->name('coupon.apply');
 Route::post('/coupon/remove', [CartController::class, 'removeCoupon'])->name('coupon.remove');

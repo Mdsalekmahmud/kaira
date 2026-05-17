@@ -18,15 +18,14 @@
                 <!-- Start Column 2 -->
                 @foreach ($products as $product)
                     <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                        <a class="product-item" href="cart.html">
+                        <a class="product-item" href="{{ route('details', $product->id) }}">
                             <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid product-thumbnail">
                             <h3 class="product-title">{{ $product->name }}</h3>
                             <strong class="product-price" style="text-decoration: line-through">{{ $product->price }}</strong> <br>
                             <strong class="product-price">{{ $product->s_price }}</strong>
 
-                            <form method="POST" action="{{route('cartadd')}}">
+                              <form action="{{route('cartadd')}}" method="POST">    
                                 @csrf
-
                                 <input type="hidden" name="product_add" value="{{$product->id}}">
                                 <span class="icon-cross">
                                     <button class="" style="border: none; background:none;">
